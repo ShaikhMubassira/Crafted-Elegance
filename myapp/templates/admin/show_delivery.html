@@ -1,0 +1,120 @@
+{% extends 'admin/basic.html' %}
+{% block main %}
+{% load static %}
+{% include 'admin/messages.html' %}
+
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Delivery Details</h4>
+                </div>
+            </div>
+
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href=" {% static 'javascript:void(0)' %} ">Table</a></li>
+                    <li class="breadcrumb-item active"><a href=" {% static 'javascript:void(0)' %} ">Datatable</a></li>
+                </ol>
+            </div>
+        </div>
+        {% if request.session.is_admin %}
+                                                                        <a href="/assign-delivery" class="btn btn-primary btn-sm">Add</a>
+                {% endif %}
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Delivery List</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="example" class="display" style="min-width: 1345px">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Order ID</th>
+                                        <th>Rent ID</th>
+                                        <th>Assigned Employee</th>
+                                        <th>Delivery Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for task in deliveries %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ task.id }}</td>
+                                        <td>{{ task.product_id.id }}</td>
+                                        <td>
+                                            {% if task.delivery_person %}
+                                                {{ task.delivery_person.name }}
+                                            {% else %}
+                                                <span style="color: red;">Not Assigned</span>
+                                            {% endif %}
+                                        </td>
+                                        <td id="status-{{ task.id }}">{{ task.status }}</td>
+                                        <td>
+                                            {% if task.status != "Delivered" and task.status != "Returned" %}
+    <button class="btn btn-primary update-btn" data-order-id="{{ task.id }}">
+        Update to Delivered
+    </button>
+{% elif task.status == "Delivered" %}
+    <span class="badge badge-success">Delivered</span>
+{% elif task.status == "Returned" %}
+    <span class="badge badge-danger">Returned</span>
+{% endif %}
+
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="6" class="text-center">No deliveries found.</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".update-btn").click(function () {
+            let orderId = $(this).data("order-id");
+            let button = $(this);
+
+            $.ajax({
+                url: `/update-delivery-status/${orderId}/`,
+                type: "POST",
+                data: {
+                    csrfmiddlewaretoken: "{{ csrf_token }}",
+                    status: "Delivered"
+                },
+                success: function (response) {
+                    if (response.success) {
+                        $("#status-" + orderId).text("Delivered");
+                        button.prop("disabled", true).text("Delivered");
+                    } else {
+                        alert("Failed to update status.");
+                    }
+                },
+                error: function () {
+                    alert("An error occurred.");
+                }
+            });
+        });
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,267 @@
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Single Product ||Crafted Elegance</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" type="image/x-icon" href="/static/img/logo.png">
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,300,300italic,400italic,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/animate.css">
+    <link rel="stylesheet" href="/static/css/jquery-ui.min.css">
+    <link rel="stylesheet" href="/static/css/meanmenu.min.css">
+    <link rel="stylesheet" href="/static/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/static/css/flaticon.css">
+    <link rel="stylesheet" href="/static/lib/css/nivo-slider.css" type="text/css" />
+    <link rel="stylesheet" href="/static/lib/css/preview.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/static/css/owl.carousel.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/responsive.css">
+    <script src="/static/js/vendor/modernizr-2.8.3.min.js"></script>
+</head>
+
+<body>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>
+            {{ message }}
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <header>
+        <div class="header-top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="header-top-menu pull-right">
+                            <ul class="nav-menu">
+                                {% if request.session.log_username %}
+                                <li><span class="text-light">Welcome, {{ request.session.log_username }}</span></li>
+                                <li><a href="/logout">LOGOUT</a></li>
+                                {% else %}
+                                <li><a href="/login">LOGIN</a></li>
+                                <li><a href="/register">REGISTER</a></li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="header-bottom">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-1 col-sm-2 col-xs-6">
+                        <div class="header-logo">
+                            <a href="/">
+                                <img src="static/img/logo.png" alt="">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-10 col-sm-9 hidden-xs">
+                        <div class="mainmenu text-center">
+                            <nav>
+                                <ul id="nav">
+                                    <li><a href="/">HOME</a></li>
+                                    <li><a href="shop">SHOP</a></li>
+                                    <li><a href="customization">CUSTOMIZATION</a></li>
+                                    <li><a href="#">Pages</a>
+                                        <ul class="sub-menu">
+                                            <li><a href="yourorders">My Orders</a></li>
+                                            <li><a href="yourcustomization">My Requests</a></li>
+                                            <li><a href="rent-history">My Rents</a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a href="contact-us">CONTACT</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                    <div class="col-md-1 col-sm-1 col-xs-6">
+                        <div class="header-cart pull-right">
+                            <ul>
+                                <li>
+                                    <a class="header-cart-link" href="{% url 'showcart' %}">
+                                        <i class="flaticon-bag"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </header>
+
+    <div class="breadcrumbs-area2 section-padding-2">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>PRODUCT DETAILS</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="product-simple-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-sm-7">
+                    <div class="single-product-image-inner">
+                        <div class="tab-content">
+                            <div role="tabpanel" class="tab-pane active" id="one">
+                                <a class="venobox" href="/media/{{ data.product_img }}" data-gall="gallery" title="">
+                                    <img src="/media/{{ data.product_img }}" alt="">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-offset-1 col-md-5 col-sm-5">
+                    <div class="single-product-details">
+                        <h2>{{ data.product_name }}</h2>
+                        <p>{{ data.product_details }}</p>
+                        <div class="single-product-price">
+                            <h2>Rs. {{ data.product_price }}</h2>
+                            {% if data.rent_per_day %}
+                            <h4>Rent per day: Rs. {{ data.rent_per_day }}</h4>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <form method="post" action="/insertintocart">
+                        {% csrf_token %}
+                        <div class="product-attributes clearfix">
+                            <span class="pull-left" id="quantity-wanted-p">
+                                <span class="dec qtybutton">-</span>
+                                <input type="text" name="quantity" value="1" class="cart-plus-minus-box">
+                                <span class="inc qtybutton">+</span>
+                            </span>
+                        </div>
+                        <div class="product-attributes clearfix">
+                            <span>
+                                <button type="submit" class="cart-btn">
+                                    <i class="flaticon-bag"></i>
+                                    <span>Add to Cart</span>
+                                </button>
+                            </span>
+                        </div>
+                        <input type="hidden" name="id" value="{{ data.id }}">
+                        <input type="hidden" name="product_price" value="{{ data.product_price }}">
+                    </form>
+
+                    <div class="product-attributes clearfix">
+                        <span>
+                            {% if data and data.id %}
+                            <a href="{% url 'rent_product' data.id %}" class="cart-btn">
+                                <i class="flaticon-bag"></i>
+                                <span>Rent</span>
+                            </a>
+                            {% else %}
+                            <p>Product not found.</p>
+                            {% endif %}
+                        </span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-top-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 col-sm-6">
+                    <div class="footer-left">
+                        <a href="/">
+                            <img src="/static/img/logo.png" alt="">
+                        </a>
+                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry.</p>
+                        <div class="social-icon">
+                            <ul>
+                                <li><a href="#"><i class="flaticon-social"></i></a></li>
+                                <li><a href="#"><i class="flaticon-social-1"></i></a></li>
+                                <li><a href="#"><i class="flaticon-symbols"></i></a></li>
+                                <li><a href="#"><i class="flaticon-camera"></i></a></li>
+                                <li><a href="#"><i class="flaticon-social-2"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="footer-widget widget-contact-us">
+                        <h2 class="footer-w-title">CONTACT US</h2>
+                        <ul class="footer-list">
+                            <li><p><span>Phone: </span> 0123456789</p></li>
+                            <li><p><span>Email: </span> ritz12@gmail.com</p></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-2 col-sm-4">
+                    <div class="footer-widget">
+                        <h2 class="footer-w-title">CUSTOMER SERVICE</h2>
+                        <ul class="footer-list">
+                            <li><a href="#">Shipping policy</a></li>
+                            <li><a href="#">Return policy</a></li>
+                            <li><a href="#">Terms and conditions</a></li>
+                            <li><a href="#">Your account</a></li>
+                            <li><a href="#">Contact us</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-2 col-sm-4">
+                    <div class="footer-widget">
+                        <h2 class="footer-w-title">MY ACCOUNT</h2>
+                        <ul class="footer-list">
+                            <li><a href="#">My Account</a></li>
+                            <li><a href="#">Login</a></li>
+                            <li><a href="#">My Cart</a></li>
+                            <li><a href="#">Wishlist</a></li>
+                            <li><a href="#">Checkout</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-2 col-sm-4">
+                    <div class="footer-widget">
+                        <h2 class="footer-w-title">INFORMATION</h2>
+                        <ul class="footer-list">
+                            <li><a href="#">About Us</a></li>
+                            <li><a href="#">Delivery Information</a></li>
+                            <li><a href="#">Privacy & Policy</a></li>
+                            <li><a href="#">Terms & Conditions</a></li>
+                            <li><a href="#">Manufactures</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-bottom-area">
+        <div class="container">
+            <div class="row">
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/vendor/jquery-1.12.0.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/owl.carousel.min.js"></script>
+    <script src="/static/js/jquery-ui.min.js"></script>
+    <script src="/static/js/jquery.countdown.min.js"></script>
+    <script type="text/javascript" src="/static/venobox/venobox.min.js"></script>
+    <script src="/static/js/jquery.meanmenu.js"></script>
+    <script src="/static/js/wow.min.js"></script>
+    <script src="/static/js/jquery.scrollUp.min.js"></script>
+    <script src="/static/js/plugins.js"></script>
+    <script src="/static/lib/js/jquery.nivo.slider.js" type="text/javascript"></script>
+    <script src="/static/lib/home.js" type="text/javascript"></script>
+    <script src="/static/js/main.js"></script>
+</body>
+
+</html>

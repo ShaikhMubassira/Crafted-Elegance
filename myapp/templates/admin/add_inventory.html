@@ -1,0 +1,66 @@
+{%extends 'admin/basic.html'%}
+{%block main%}
+{%load static%}
+{% include 'admin/messages.html'%}
+
+<div class="page-content-wrapper">
+        <div class="container-fluid">
+                <div class="row">
+                        <div class="col-sm-12">
+                                <div class="page-title-box">
+                                        <h4 class="page-title">Add Inventory Details</h4>
+                                </div>
+                        </div>
+                        <div class="clearfix"></div>
+                </div><!-- end page title end breadcrumb -->
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title mb-4">Add Stock</h4>
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <div class="mb-3">
+                            <label for="product_price" class="form-label">Stock</label>
+                            <input
+                                type="number"
+                                class="form-control"
+                                id="product_price"
+                                name="stocks"
+                                placeholder="Enter product Quantity"
+                                required
+                            />
+                        </div>
+                        <div class="mb-3">
+                            <label for="order_id" class="form-label">Product</label>
+                            <select class="form-control" id="order_id" name="product_id" required>
+                                {% for all in products %}
+                                    <option value="{{ all.id }}">{{ all }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="order_id" class="form-label">Supplier</label>
+                            <select class="form-control" id="order_id" name="supplier_id" required>
+                                {% for all in supplier %}
+                                    <option value="{{ all.id }}">{{ all }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">Add Supplier</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+        </div><!-- container -->
+</div><!-- Page content Wrapper -->
+{%endblock%}

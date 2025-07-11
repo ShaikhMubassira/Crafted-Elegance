@@ -1,0 +1,94 @@
+{%extends 'admin/basic.html'%}
+{%block main%}
+{%load static%}
+{% include 'admin/messages.html'%}
+
+        <div class="content-body">
+            <div class="container-fluid">
+                <div class="row page-titles mx-0">
+                    <div class="col-sm-6 p-md-0">
+                        <div class="welcome-text">
+                            <h4>Employee</h4>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href=" {% static 'javascript:void(0)' %} ">Table</a></li>
+                            <li class="breadcrumb-item active"><a href=" {% static 'javascript:void(0)' %} ">Datatable</a></li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- row -->
+                {% if request.session.is_admin %}
+                                                                        <a href="{% url 'add_employees'  %}" class="btn btn-primary btn-sm">Add</a>
+                {% endif %}
+
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Employee List</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table id="example" class="display" style="min-width: 1345px">
+                                        <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Name
+                                                </th>
+                                                {% if request.session.is_admin %}
+                                                <th>Email
+                                                </th>
+                                                <th>Password</th>
+                                                {% endif %}
+                                                <th>Phone</th>
+                                                <th>Role</th>
+                                                <th>Work Schedule</th>
+                                                <th>Edit</th>
+<!--                                                <th>Assign Task</th>-->
+{% if request.session.is_admin %}
+                                                <th>Delete</th>
+                                            {% endif %}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for login in logins %}
+                                                <tr>
+                                                        <td>{{ forloop.counter }}</td>
+                                                        <td>{{login.name}}</td>
+                                                        <td>{{login.email_id}}</td>
+                                                        {% if request.session.is_admin %}
+                                                        <td>********</td>
+                                                        {% endif %}
+                                                        <td>{{login.phone_num}}</td>
+                                                        <td>{{login.role}}</td>
+                                                        <td>{{login.work_schedule}}</td>
+                                                     <td>
+                                                            <a href="{% url 'edit_employee' login.id %}" class="btn btn-primary btn-sm">Edit</a>
+                                                        </td>
+<!--                                                        <td>{{login.assigned_task}}</td>-->
+{% if request.session.is_admin %}
+
+                                                        <td>
+                                                            <a href="{% url 'delete_employee' login.id %}" class="btn btn-danger btn-sm">Delete</a>
+                                                        </td>
+                                                    {% endif %}
+
+                                                </tr>
+                                        {%endfor%}
+                                        </tbody>
+
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+{%endblock%}
+

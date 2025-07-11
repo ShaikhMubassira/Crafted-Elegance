@@ -1,0 +1,213 @@
+<!doctype html>
+<html class="no-js" lang="">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>My Rents || Crafted Elegance</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" type="image/x-icon" href="static/img/favicon.ico">
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,300,300italic,400italic,700' rel='stylesheet' type='text/css'>
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/css/animate.css">
+    <link rel="stylesheet" href="static/css/jquery-ui.min.css">
+    <link rel="stylesheet" href="static/css/meanmenu.min.css">
+    <link rel="stylesheet" href="static/css/font-awesome.min.css">
+    <link rel="stylesheet" href="static/css/flaticon.css">
+    <link rel="stylesheet" href="static/venobox/venobox.css">
+    <link rel="stylesheet" href="static/lib/css/nivo-slider.css">
+    <link rel="stylesheet" href="static/lib/css/preview.css">
+    <link rel="stylesheet" href="static/css/owl.carousel.css">
+    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="static/css/responsive.css">
+    <script src="static/js/vendor/modernizr-2.8.3.min.js"></script>
+</head>
+<body>
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<header>
+    <div class="header-top">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="header-top-menu pull-right">
+                        <ul class="nav-menu">
+                            {% if request.session.log_username %}
+                            <li><span class="text-light">Welcome, {{ request.session.log_username }}</span></li>
+                            <li><a href="/logout">LOGOUT</a></li>
+                            {% else %}
+                            <li><a href="/login">LOGIN</a></li>
+                            <li><a href="/register">REGISTER</a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="header-bottom">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-1 col-sm-2 col-xs-6">
+                    <div class="header-logo">
+                        <a href="/"><img src="static/img/logo.png" alt=""></a>
+                    </div>
+                </div>
+                <div class="col-md-10 col-sm-9 hidden-xs">
+                    <div class="mainmenu text-center">
+                        <nav>
+                            <ul id="nav">
+                                <li><a href="/">HOME</a></li>
+                                <li><a href="shop">SHOP</a></li>
+                                <li><a href="customization">CUSTOMIZATION</a></li>
+                                <li><a href="#">Pages</a>
+                                    <ul class="sub-menu">
+                                        <li><a href="yourorders">My Orders</a></li>
+                                        <li><a href="yourcustomization">My Requests</a></li>
+                                        <li><a href="rent-history">My Rents</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="contact-us">CONTACT</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+                <div class="col-md-1 col-sm-1 col-xs-6">
+                    <div class="header-cart pull-right">
+                        <ul>
+                            <li>
+                                <a class="header-cart-link" href="{% url 'showcart' %}">
+                                    <i class="flaticon-bag"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="breadcrumbs-area2">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>My Rents</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="shopping-cart-area section-padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="wishlist-table-area table-responsive">
+                    <table id="dataTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Product</th>
+                                <th>Image</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Rent Amount</th>
+                                <th>Deposit</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for rent in rent_orders %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ rent.product_id.product_name }}</td>
+                                <td><img src="{{ rent.product_id.product_img.url }}" alt="{{ rent.product_id.product_name }}" width="100"></td>
+                                <td>{{ rent.start_date }}</td>
+                                <td>{{ rent.end_date }}</td>
+                                <td>₹{{ rent.rent_amount }}</td>
+                                <td>₹{{ rent.rent_deposit }}</td>
+                                <td>
+                                    {% if rent.return_status == "Returned" %}
+                                    <span style="color: green;">Returned</span>
+                                    {% else %}
+                                    <span style="color: red;">Ongoing</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="8">No rental history found.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="shopingcart-bottom-area pull-right">
+                    <a class="right-shoping-cart" href="#" onclick="generateInvoice()">Generate Invoice</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="static/js/vendor/jquery-1.12.0.min.js"></script>
+<script src="static/js/bootstrap.min.js"></script>
+<script src="static/js/owl.carousel.min.js"></script>
+<script src="static/js/jquery-ui.min.js"></script>
+<script src="static/js/jquery.countdown.min.js"></script>
+<script src="static/venobox/venobox.min.js"></script>
+<script src="static/js/jquery.meanmenu.js"></script>
+<script src="static/js/wow.min.js"></script>
+<script src="static/js/jquery.scrollUp.min.js"></script>
+<script src="static/js/plugins.js"></script>
+<script src="static/lib/js/jquery.nivo.slider.js"></script>
+<script src="static/lib/home.js"></script>
+<script src="static/js/main.js"></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    document.querySelectorAll(".pay-now-btn").forEach(button => {
+    button.addEventListener("click", function () {
+        let customId = this.dataset.id;
+        let amount = this.dataset.amount;
+        let userId = this.dataset.user;
+
+        fetch("/create-order", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ custom_id: customId, amount: amount, user_id: userId })
+        })
+        .then(response => response.json())
+        .then(data => {
+            let options = {
+                "key": "YOUR_RAZORPAY_KEY",
+                "amount": data.amount,
+                "currency": "INR",
+                "order_id": data.order_id,
+                "handler": function (response) {
+                    fetch("/update-payment-status", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            order_id: data.order_id,
+                            payment_id: response.razorpay_payment_id
+                        })
+                    })
+                    .then(res => res.json())
+                    .then(() => {
+                        location.reload();  // Reload to disable Pay Now button
+                    });
+                }
+            };
+            let rzp1 = new Razorpay(options);
+            rzp1.open();
+        });
+    });
+});
+</script>
+</body>
+</html>

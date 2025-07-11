@@ -1,0 +1,90 @@
+{% extends 'admin/basic.html' %}
+{% block main %}
+{% load static %}
+{% include 'admin/messages.html' %}
+
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Assigned Tasks</h4>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="javascript:void(0)">Table</a></li>
+                    <li class="breadcrumb-item active"><a href="javascript:void(0)">Datatable</a></li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Show "Add Task" button only for admins -->
+        {% if request.session.is_admin %}
+            <a href="{% url 'add_task' %}" class="btn btn-primary btn-sm mb-3">Add Task</a>
+        {% endif %}
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Task List</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="example" class="display" style="min-width: 1345px">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Custom Product</th>
+                                        <th>Employee</th>
+                                        <th>Status</th>
+                                        <th>
+                                            {% if not request.session.is_admin %}
+                                            Update
+                                            {% endif %}
+                                        </th>
+                                        {% if request.session.is_admin %}
+                                            <th>Delete</th>
+                                        {% endif %}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for task in tasks %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ task.order_id }}</td>
+                                        <td>{{ task.employee_id }}</td>
+                                        <td>{{ task.task_status }}</td>
+                                        <td>
+                                            <!-- Employees can only update order status -->
+                                            {% if not request.session.is_admin %}
+                                            {% if task.task_status != 'Ready' %}
+                                                <a href="{% url 'update_task_status' task.id %}" class="btn btn-success btn-sm">Update Status</a>
+                                            {% else %}
+                                            Done
+                                            {% endif %}
+                                            {% endif %}
+                                        </td>
+                                        {% if request.session.is_admin %}
+                                            <td>
+                                                <a href="{% url 'delete_task' task.id %}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</a>
+                                            </td>
+                                        {% endif %}
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="{% if request.session.is_admin %}6{% else %}5{% endif %}" class="text-center">No tasks found.</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

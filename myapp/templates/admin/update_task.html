@@ -1,0 +1,59 @@
+{% extends 'admin/basic.html' %}
+{% block main %}
+{% load static %}
+{% include 'admin/messages.html' %}
+
+<div class="page-content-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">Assign Task</h4>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title mb-4">Update Task Status</h4>
+                            <form method="post">
+                                {% csrf_token %}
+                                
+                                <div class="mb-3">
+                                    <label for="order_id" class="form-label">Order</label>
+                                    <input type="text" class="form-control" id="order_id" value="{{ task.order_id }}" readonly>
+                                </div>
+        
+                                <div class="mb-3">
+                                    <label for="employee_id" class="form-label">Employee</label>
+                                    <input type="text" class="form-control" id="employee_id" value="{{ task.employee_id }}" readonly>
+                                </div>
+        
+                                <div class="mb-3">
+                                    <label for="task_status" class="form-label">Task Status</label>
+                                    <select class="form-control" id="task_status" name="task_status" required>
+                                        {% for status, label in task_status_choices %}
+                                            <option value="{{ status }}" {% if task.task_status == status %}selected{% endif %}>
+                                                {{ label }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+        
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-primary">Update Status</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>        
+        
+    </div>
+</div>
+
+{% endblock %}

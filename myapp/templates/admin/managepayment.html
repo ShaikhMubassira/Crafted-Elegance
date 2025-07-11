@@ -1,0 +1,82 @@
+{%extends 'admin/basic.html'%}
+{%block main%}
+{%load static%}
+{% include 'admin/messages.html'%}
+
+        <div class="content-body">
+            <div class="container-fluid">
+                <div class="row page-titles mx-0">
+                    <div class="col-sm-6 p-md-0">
+                        <div class="welcome-text">
+                            <h4>Payment</h4>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href=" {% static 'javascript:void(0)' %} ">Table</a></li>
+                            <li class="breadcrumb-item active"><a href=" {% static 'javascript:void(0)' %} ">Datatable</a></li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- row -->
+<!--                                                                        <a href="{% url 'add_product'  %}" class="btn btn-primary btn-sm">Add</a>-->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Payment List</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Invoice Id</th>
+                                <th>Order Id</th>
+                                <th>Payment Date</th>
+                                <th>Payment Mode</th>
+                                <th>Payment Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Loop through Razorpay Payments -->
+                            {% for payment in razorpay_payments %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ payment.id }}</td>
+                                <td>{{ payment.order_id }}</td>
+                                <td>-</td> <!-- No direct date field in RazorpayPayment -->
+                                <td>Online</td>
+                                <td>{{ payment.status }}</td>
+                            </tr>
+                            {% endfor %}
+
+                            <!-- Loop through Final Order Payments -->
+                            {% for payment in final_order_payments %}
+                            <tr>
+                                <td>{{ forloop.counter|add:razorpay_payments.count }}</td>
+                                <td>{{ payment.id }}</td>
+                                <td>{{ payment.o_id.id }}</td>
+                                <td>{{ payment.pay_datetime|date:"d M, Y" }}</td>
+                                <td>{{ payment.get_payment_type_display }}</td>
+                                <td>{{ payment.status }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+            </div>
+        </div>
+
+{%endblock%}
+

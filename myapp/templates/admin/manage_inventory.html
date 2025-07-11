@@ -1,0 +1,72 @@
+{%extends 'admin/basic.html'%}
+{%block main%}
+{%load static%}
+{% include 'admin/messages.html'%}
+
+        <div class="content-body">
+            <div class="container-fluid">
+                <div class="row page-titles mx-0">
+                    <div class="col-sm-6 p-md-0">
+                        <div class="welcome-text">
+                            <h4>Inventory</h4>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href=" {% static 'javascript:void(0)' %} ">Table</a></li>
+                            <li class="breadcrumb-item active"><a href=" {% static 'javascript:void(0)' %} ">Datatable</a></li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- row -->
+                                                                       <a href="/add_inventory" class="btn btn-primary btn-sm">Add Inventory</a>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Inventory List</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Product Name</th>
+                                    <th>Supplier Name</th>
+                                    <th>Stock Quantity</th>
+                                   <th>Edit</th>
+                                   <th>Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for orders in orders%}    
+                                <tr>
+                                        <td>{{forloop.counter}}</td>
+                                        <td>{{orders.product_id.product_name}}</td>
+                                        <td>{{orders.supplier_id.name}}</td>
+                                        <td>{{orders.stock_quantity}}</td>
+                                       <td>
+                                           <a href="/edit-inventory/{{orders.id}}" class="btn btn-primary btn-sm">Edit</a>
+                                        </td>
+                                        <td>
+
+                                            <a href="/delete-inventory/{{orders.id}}" class="btn btn-danger btn-sm">Delete</a>
+                                        </td>                                    
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+            </div>
+        </div>
+
+{%endblock%}
+

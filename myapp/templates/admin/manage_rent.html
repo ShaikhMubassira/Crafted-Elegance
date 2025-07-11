@@ -1,0 +1,86 @@
+{% extends 'admin/basic.html' %}
+{% block main %}
+{% load static %}
+{% include 'admin/messages.html' %}
+
+<div class="content-body">
+    <div class="container-fluid">
+        <!-- Page Header -->
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Manage Rent Orders</h4>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% static 'javascript:void(0)' %}">Table</a></li>
+                    <li class="breadcrumb-item active"><a href="{% static 'javascript:void(0)' %}">Datatable</a></li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Rent Orders Table -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Rent Orders List</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="dataTable" class="display" style="min-width: 1345px">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Order ID</th>
+                                        <th>Product Name</th>
+                                        <th>User</th>
+                                        <th>Start Date</th>
+                                        <th>End Date</th>
+                                        <th>Rent Deposit</th>
+                                        <th>Rent Amount</th>
+                                        <th>Return Status</th>
+                                        <th>Payment Status</th>
+                                        <th>Delivery Person</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for order in rent_orders %}
+                                        <tr>
+                                            <td>{{ forloop.counter }}</td>
+                                            <td>{{ order.id }}</td>
+                                            <td>{{ order.product_id.product_name }}</td>
+                                            <td>{{ order.user_id.name }}</td>
+                                            <td>{{ order.start_date }}</td>
+                                            <td>{{ order.end_date }}</td>
+                                            <td>₹{{ order.rent_deposit }}</td>
+                                            <td>₹{{ order.rent_amount|floatformat:2 }}</td>
+                                            <td>{{ order.return_status }}</td>
+                                            <td>{{ order.payment_status }}</td>
+                                            <td>
+                                                {% if order.delivery_person %}
+                                                    {{ order.delivery_person.name }}
+                                                {% else %}
+                                                    Not Assigned
+                                                {% endif %}
+                                            </td>
+                                            <td>{{ order.status }}</td>
+                                        </tr>
+                                    {% empty %}
+                                        <tr>
+                                            <td colspan="12">No rent orders found.</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
